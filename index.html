@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EnginePortal</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+</head>
+<body>
+
+  <div id="portal">
+
+    <!-- TOP BAR -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="logo">Engine<span>Portal</span></div>
+        <div class="badge">AI-Powered</div>
+      </div>
+      <div class="topbar-right">
+        <div class="ai-pill" onclick="goPage('ai')">
+          <div class="ai-dot"></div>
+          <i class="ti ti-sparkles"></i> AI Engine
+        </div>
+        <div class="avatar" id="avatarInitials">YO</div>
+      </div>
+    </div>
+
+    <div class="body">
+
+      <!-- SIDEBAR -->
+      <div class="sidebar">
+        <div class="nav-section">
+          <div class="nav-label">Overview</div>
+          <div class="nav-item active" onclick="goPage('dashboard')">
+            <i class="ti ti-layout-dashboard"></i> Dashboard
+          </div>
+          <div class="nav-item" onclick="goPage('ai')">
+            <i class="ti ti-sparkles"></i> AI Engine
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-label">User Management</div>
+          <div class="nav-item" onclick="goPage('users')">
+            <i class="ti ti-users"></i> All Users
+            <span class="count" id="userCount">0</span>
+          </div>
+          <div class="nav-item" onclick="goPage('roles')">
+            <i class="ti ti-shield-half"></i> Roles
+          </div>
+          <div class="nav-item" onclick="goPage('permissions')">
+            <i class="ti ti-lock"></i> Permissions
+          </div>
+          <div class="nav-item" onclick="goPage('invites')">
+            <i class="ti ti-mail-forward"></i> Invitations
+            <span class="count" id="inviteCount">0</span>
+          </div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-label">System</div>
+          <div class="nav-item" onclick="goPage('activity')">
+            <i class="ti ti-activity"></i> Activity Log
+          </div>
+          <div class="nav-item" onclick="goPage('settings')">
+            <i class="ti ti-settings"></i> Settings
+          </div>
+        </div>
+      </div>
+
+      <!-- MAIN CONTENT -->
+      <div class="main">
+
+        <!-- DASHBOARD -->
+        <div class="page active" id="page-dashboard">
+          <div class="stats-row">
+            <div class="stat-card">
+              <div class="stat-label"><i class="ti ti-users"></i> Total Users</div>
+              <div class="stat-val" id="statUsers">0</div>
+              <div class="stat-sub up" id="statUsersSub">Loading...</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label"><i class="ti ti-shield"></i> Roles</div>
+              <div class="stat-val">5</div>
+              <div class="stat-sub">Admin · Dev · Editor · Client · Viewer</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label"><i class="ti ti-clock"></i> Pending Invites</div>
+              <div class="stat-val" id="statInvites">0</div>
+              <div class="stat-sub warn">Awaiting acceptance</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label"><i class="ti ti-activity"></i> Active Users</div>
+              <div class="stat-val" id="statActive">0</div>
+              <div class="stat-sub up">Online</div>
+            </div>
+          </div>
+
+          <!-- AI PANEL -->
+          <div class="ai-panel">
+            <div class="ai-panel-header">
+              <i class="ti ti-brain"></i>
+              <span>AI Engine — Smart Suggestions</span>
+              <div class="ai-dot" style="margin-left:auto"></div>
+            </div>
+            <div class="ai-suggestions">
+              <div class="ai-suggestion" onclick="quickAsk('Review all user permissions and flag any security risks')">
+                <i class="ti ti-shield-check"></i> Review permissions and flag security risks
+              </div>
+              <div class="ai-suggestion" onclick="quickAsk('Which users have been inactive for more than 30 days and what should I do?')">
+                <i class="ti ti-user-off"></i> Identify inactive users and suggest cleanup
+              </div>
+              <div class="ai-suggestion" onclick="quickAsk('Suggest the best role structure for a SaaS product with developers and clients')">
+                <i class="ti ti-sitemap"></i> Suggest optimized role structure for my team
+              </div>
+            </div>
+            <div class="ai-input-row">
+              <input class="ai-input" id="dashAiInput" placeholder="Ask AI about your users or roles..." onkeydown="if(event.key==='Enter') dashAsk()" />
+              <button class="ai-send" onclick="dashAsk()"><i class="ti ti-send"></i> Ask</button>
+            </div>
+            <div id="dashAiResult"></div>
+          </div>
+
+          <div class="section-title">
+            Recent Activity
+            <a onclick="goPage('activity')">View all →</a>
+          </div>
+          <div class="activity-list" id="dashActivity">
+            <div class="empty-state">Loading activity...</div>
+          </div>
+        </div>
+
+        <!-- USERS -->
+        <div class="page" id="page-users">
+          <div class="actions-row">
+            <button class="btn btn-primary" onclick="openInviteModal()">
+              <i class="ti ti-user-plus"></i> Invite User
+            </button>
+            <button class="btn" onclick="quickAsk('Suggest the best roles for a team of developers, clients, and content editors')">
+              <i class="ti ti-sparkles"></i> AI Suggest Roles
+            </button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>User</th><th>Role</th><th>Status</th><th>Joined</th><th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="usersTableBody">
+                <tr><td colspan="5" class="empty-state">Loading users...</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="usersAiResult"></div>
+        </div>
+
+        <!-- ROLES -->
+        <div class="page" id="page-roles">
+          <div class="actions-row">
+            <button class="btn btn-primary" onclick="openRoleModal()">
+              <i class="ti ti-plus"></i> New Role
+            </button>
+            <button class="btn" onclick="quickAsk('Analyze my 5 roles (Admin, Developer, Editor, Client, Viewer) and suggest improvements for a SaaS product')">
+              <i class="ti ti-sparkles"></i> AI Analyze Roles
+            </button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Role</th><th>Users</th><th>Access Level</th><th>Description</th><th>Actions</th></tr>
+              </thead>
+              <tbody id="rolesTableBody">
+                <tr><td colspan="5" class="empty-state">Loading roles...</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div id="rolesAiResult"></div>
+        </div>
+
+        <!-- PERMISSIONS -->
+        <div class="page" id="page-permissions">
+          <div class="actions-row">
+            <button class="btn" onclick="quickAsk('Review this permissions matrix and suggest changes to improve security without limiting productivity')">
+              <i class="ti ti-sparkles"></i> AI Review Permissions
+            </button>
+            <button class="btn btn-primary" onclick="savePermissions()">Save Changes</button>
+          </div>
+          <div class="section-title">Permissions Matrix</div>
+          <div class="table-wrap">
+            <table id="permissionsTable">
+              <thead>
+                <tr>
+                  <th>Resource</th>
+                  <th>Admin</th><th>Developer</th><th>Editor</th><th>Client</th><th>Viewer</th>
+                </tr>
+              </thead>
+              <tbody id="permissionsBody"></tbody>
+            </table>
+          </div>
+          <div id="permissionsAiResult"></div>
+        </div>
+
+        <!-- INVITES -->
+        <div class="page" id="page-invites">
+          <div class="actions-row">
+            <button class="btn btn-primary" onclick="openInviteModal()">
+              <i class="ti ti-mail-forward"></i> Send Invite
+            </button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Email</th><th>Role</th><th>Sent</th><th>Status</th><th>Actions</th></tr>
+              </thead>
+              <tbody id="invitesTableBody">
+                <tr><td colspan="5" class="empty-state">No invitations yet.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ACTIVITY -->
+        <div class="page" id="page-activity">
+          <div class="section-title">Full Activity Log</div>
+          <div class="activity-list" id="fullActivity">
+            <div class="empty-state">No activity yet.</div>
+          </div>
+        </div>
+
+        <!-- AI ENGINE -->
+        <div class="page" id="page-ai">
+          <div class="ai-panel">
+            <div class="ai-panel-header">
+              <i class="ti ti-brain"></i>
+              <span>AI Engine — User & Role Intelligence</span>
+              <div class="ai-dot" style="margin-left:auto"></div>
+            </div>
+            <div class="ai-suggestions">
+              <div class="ai-suggestion" onclick="fullAsk('Audit all user roles and flag anyone with more permissions than needed')">
+                <i class="ti ti-shield-search"></i> Audit roles — flag over-permissioned users
+              </div>
+              <div class="ai-suggestion" onclick="fullAsk('Generate an onboarding checklist for a new Developer joining this portal')">
+                <i class="ti ti-checklist"></i> Generate onboarding checklist for new Developer
+              </div>
+              <div class="ai-suggestion" onclick="fullAsk('What is the best practice for separating client and internal team access in a SaaS backend portal?')">
+                <i class="ti ti-building"></i> Best practice: client vs internal team access
+              </div>
+              <div class="ai-suggestion" onclick="fullAsk('Draft an access policy document for roles: Admin, Developer, Editor, Client, Viewer')">
+                <i class="ti ti-file-text"></i> Draft access policy document for all roles
+              </div>
+            </div>
+            <div class="ai-input-row">
+              <input class="ai-input" id="fullAiInput" placeholder="Ask anything about users, roles, permissions, security..." onkeydown="if(event.key==='Enter') fullAsk()" />
+              <button class="ai-send" onclick="fullAsk()"><i class="ti ti-send"></i> Ask</button>
+            </div>
+            <div id="fullAiResult"></div>
+          </div>
+        </div>
+
+        <!-- SETTINGS -->
+        <div class="page" id="page-settings">
+          <div class="section-title">Settings</div>
+          <div class="settings-card">
+            <div class="settings-row">
+              <div class="settings-label">Portal Name</div>
+              <input class="ai-input" id="settingsName" value="EnginePortal" style="max-width:260px"/>
+            </div>
+            <div class="settings-row">
+              <div class="settings-label">Your Name</div>
+              <input class="ai-input" id="settingsUser" placeholder="Enter your name" style="max-width:260px"/>
+            </div>
+            <div class="settings-row">
+              <div class="settings-label">AI Model</div>
+              <select class="ai-input" style="max-width:260px">
+                <option>claude-sonnet-4-20250514</option>
+              </select>
+            </div>
+            <button class="btn btn-primary" style="margin-top:1rem" onclick="saveSettings()">Save Settings</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- INVITE MODAL -->
+  <div class="modal-overlay" id="inviteModal">
+    <div class="modal">
+      <div class="modal-header">
+        <span>Invite User</span>
+        <button class="btn" onclick="closeModal('inviteModal')"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="modal-body">
+        <label class="form-label">Email Address</label>
+        <input class="ai-input" id="inviteEmail" placeholder="user@example.com" style="width:100%;margin-bottom:12px"/>
+        <label class="form-label">Assign Role</label>
+        <select class="ai-input" id="inviteRole" style="width:100%;margin-bottom:16px">
+          <option value="viewer">Viewer</option>
+          <option value="client">Client</option>
+          <option value="editor">Editor</option>
+          <option value="developer">Developer</option>
+          <option value="admin">Admin</option>
+        </select>
+        <button class="btn btn-primary" style="width:100%" onclick="sendInvite()">Send Invitation</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ROLE MODAL -->
+  <div class="modal-overlay" id="roleModal">
+    <div class="modal">
+      <div class="modal-header">
+        <span>Create New Role</span>
+        <button class="btn" onclick="closeModal('roleModal')"><i class="ti ti-x"></i></button>
+      </div>
+      <div class="modal-body">
+        <label class="form-label">Role Name</label>
+        <input class="ai-input" id="roleName" placeholder="e.g. Manager" style="width:100%;margin-bottom:12px"/>
+        <label class="form-label">Description</label>
+        <input class="ai-input" id="roleDesc" placeholder="What can this role do?" style="width:100%;margin-bottom:16px"/>
+        <button class="btn btn-primary" style="width:100%" onclick="createRole()">Create Role</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/ai.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

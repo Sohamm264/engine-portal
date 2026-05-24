@@ -1,0 +1,13 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "You (Admin)",
+      "email": "admin@engineportal.com",
+      "role": "admin",
+      "status": "active",
+      "created_at": 1779040965792
+    }
+  ],
+  "nextId": 2
+}
