@@ -1,6 +1,6 @@
 // js/ai.js — All AI calls go through your backend proxy
 
-const AI_ENDPOINT = 'http://localhost:7000/api/ai/ask';
+const AI_ENDPOINT = 'https://engine-portal-api.onrender.com/api/ai/ask';
 
 async function callAI(prompt) {
   const res = await fetch(AI_ENDPOINT, {
