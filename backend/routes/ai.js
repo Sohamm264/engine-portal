@@ -9,8 +9,7 @@ const groq = new Groq({
 router.post("/ask", async (req, res) => {
   const { prompt } = req.body;
 
-  
-console.log("AI route hit:", prompt);
+  console.log("AI route hit:", prompt);
 
   if (!prompt) {
     return res.status(400).json({ error: "Prompt is required" });
@@ -25,21 +24,28 @@ console.log("AI route hit:", prompt);
           content:
             "You are an AI engine in a backend portal managing users, roles and permissions. Be concise and practical.",
         },
-        { role: "user", content: prompt },
+        {
+          role: "user",
+          content: prompt,
+        },
       ],
     });
 
-    const reply = chatCompletion.choices?.[0]?.message?.content || "No AI response";
+    const reply =
+      chatCompletion.choices?.[0]?.message?.content ||
+      "No AI response";
+
     console.log("AI Reply:", reply);
 
     res.json({ reply });
- catch (err) {
-  console.error("GROQ ERROR:", err);
-  res.status(500).json({
-    error: "AI request failed",
-    details: err.message
-  });
-}
+
+  } catch (err) {
+    console.error("GROQ ERROR:", err);
+
+    res.status(500).json({
+      error: "AI request failed",
+      details: err.message,
+    });
   }
 });
 
