@@ -29,7 +29,8 @@ console.log("AI route hit:", prompt);
       ],
     });
 
-    const reply = chatCompletion.choices[0].message.content;
+    const reply = chatCompletion.choices?.[0]?.message?.content || "No AI response";
+    console.log("AI Reply:", reply);
 
     res.json({ reply });
   } catch (err) {
