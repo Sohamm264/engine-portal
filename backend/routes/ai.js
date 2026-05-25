@@ -33,8 +33,13 @@ console.log("AI route hit:", prompt);
     console.log("AI Reply:", reply);
 
     res.json({ reply });
-  } catch (err) {
-    res.status(500).json({ error: "AI request failed: " + err.message });
+ catch (err) {
+  console.error("GROQ ERROR:", err);
+  res.status(500).json({
+    error: "AI request failed",
+    details: err.message
+  });
+}
   }
 });
 
