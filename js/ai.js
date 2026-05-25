@@ -57,7 +57,7 @@ async function fullAsk(preset) {
     const reply = await callAI(q);
     showAIResult('fullAiResult', reply);
   } catch (e) {
-    showAIResult('fullAiResult', 'Could not reach AI engine. Make sure your backend is running on port 3000.');
+   showAIResult('fullAiResult', 'Could not reach AI engine.');
   }
 }
 
